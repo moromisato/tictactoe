@@ -8,76 +8,147 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Position from './src/components/Position';
 
-const App: () => React$Node = () => {
+const App  = () => {
 
-  const [ board, setBoard ] = useState(Array(9).fill(null))
+  let initialBoard =Array(9).fill(null)
+
+  const [ board, setBoard ] = useState(initialBoard)
+  const [ pointer, setPointer ] = useState('auto')
   const [ player, setPlayer ] = useState(true)
+  const [ scoreOne, setScoreOne ] = useState(0)
+  const [ scoreTwo, setScoreTwo ] = useState(0)
+
+  function renderBoardPiece(position) {
+    return(
+      <Position value={board[position]} onClick={() => makeMove(position)} />
+    )
+  }
 
   function makeMove(position){
 
-    let boardCopy = board.slice()
+    if (board[position] === null){
+      let boardCopy = board.slice()
 
-    if (player){
-      boardCopy[position] = 'X'
-    } else {
-      boardCopy[position] = 'O'
+      if (player){
+        boardCopy[position] = 'X'
+      } else {
+        boardCopy[position] = 'O'
+      }
+      setPlayer(!player)
+      setBoard(boardCopy)
     }
 
-    setPlayer(!player)
-    setBoard(boardCopy)
   }
 
   useEffect(()=>{
-    console.log(board)
+    
+    if (checkWinner(board)){
+      setPointer('none')
+
+      if (!player) {
+        setScoreOne(scoreOne + 1)
+        console.warn('Jogador 1 venceu!')
+      } else{
+        console.warn('Jogador 2 venceu!')
+        setScoreTwo(scoreTwo + 1)
+      }
+      setTimeout(() => {
+        clearBoard()
+        setPointer('auto')
+      }, 3000)
+    }
+    
+    else if ( checkFullBoard(board) ){
+      console.warn('Empatou!')
+    }
+    
+
   }, board)
 
-  function handleClick(position) {
-    makeMove(position)
+  function checkWinner(board) {
+    
+    const possibleWins = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [2, 4, 6],
+      [0, 4, 8]
+    ]
+
+    for (let i = 0; i < possibleWins.length; i++){
+      let [posOne, posTwo, posThree] = possibleWins[i]
+      
+      if ((board[posOne] === 'X' && board[posTwo] === 'X' && board[posThree] === 'X') || 
+          (board[posOne] === 'O' && board[posTwo] === 'O' && board[posThree] === 'O')){
+        return true
+        
+      }
+
+    }
+
+    return false
+  }
+
+  function checkFullBoard(board) {
+    for(let i = 0; i < board.length; i++){
+      if (board[i] === null){
+        return false
+      } 
+    }
+    return true
+  }
+
+  function restartGame(){
+    clearBoard()
+    setScoreOne(0)
+    setScoreTwo(0)
+  }
+
+  function clearBoard(){
+    setBoard(initialBoard)
+    setPlayer(true)
   }
 
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <View style={styles.board}>
-        <Text>{board}</Text>
+      <View style={styles.header_buttons}>
+          <TouchableOpacity onPress={() => restartGame()}>
+            <Text>Restart</Text>
+          </TouchableOpacity>
+      </View>
+      <View pointerEvents={pointer} style={styles.board}>
+    
         <View style={{flexDirection: 'row', flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center'}}>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(0)}>
-            <Text>{}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(1)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(2)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(3)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(4)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(5)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(6)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(7)}>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleClick(8)}>
-          </TouchableOpacity>
+          {renderBoardPiece(0)}
+          {renderBoardPiece(1)}
+          {renderBoardPiece(2)}
+
+          {renderBoardPiece(3)}
+          {renderBoardPiece(4)}
+          {renderBoardPiece(5)}
+          
+          {renderBoardPiece(6)}
+          {renderBoardPiece(7)}
+          {renderBoardPiece(8)}
         </View>
+        
+      </View>
+      <View style={styles.scores}>
+          <Text style={styles.score_text}>Player 1: {scoreOne}</Text>
+          <Text style={styles.score_text}>Player 2: {scoreTwo}</Text>
       </View>
     </>
   );
@@ -98,6 +169,22 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 5,
     backgroundColor: 'lightgray'
+  },
+  scores: {
+    flex: 0.2,
+    height: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  score_text: {
+    fontSize: 25
+  },
+  header_buttons: {
+    flex: 0.1,
+    justifyContent: 'center',
+    marginRight: 10,
+    alignItems: 'flex-end',
   }
 });
 
