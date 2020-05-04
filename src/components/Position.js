@@ -3,21 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 // import { Container } from './styles';
 
-export default function Position(player) {
-
-  const [ playerMark, setPlayerMark ] = useState('')
-
-  function markPosition(player){
-    if (player) {
-      setPlayerMark('X')
-    } else {
-      setPlayerMark('O')
-    }
-  }
-
+export default function Position({value, onClick}) {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => markPosition(player)}>
-        <Text>{playerMark}</Text>
+    <TouchableOpacity style={styles.container} onPress={onClick}>
+        <Text style={styles.marker}>{value}</Text>
     </TouchableOpacity>
   );
 }
@@ -28,6 +17,11 @@ const styles = StyleSheet.create({
         height: 100,
         margin: 10,
         borderRadius: 5,
-        backgroundColor: 'lightgray'
+        backgroundColor: 'lightgray',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    marker:{
+      fontSize: 40,
     }
 })
