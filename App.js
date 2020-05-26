@@ -13,41 +13,54 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Switch,
+  Image
 } from 'react-native';
 
 const height = Dimensions.get('screen').height
 
 import Position from './src/components/Position';
 
-const App  = () => {
+const App = () => {
 
   let initialTestBoard = Array(9).fill(null)
 
-  const [ board, setBoard ] = useState(initialTestBoard)
-  const [ pointer, setPointer ] = useState('auto')
-  const [ player, setPlayer ] = useState(true)
-  const [ scoreOne, setScoreOne ] = useState(0)
-  const [ scoreTwo, setScoreTwo ] = useState(0)
+  const [board, setBoard] = useState(initialTestBoard)
+  const [pointer, setPointer] = useState('auto')
+  const [player, setPlayer] = useState(true)
+  const [scoreOne, setScoreOne] = useState(0)
+  const [scoreTwo, setScoreTwo] = useState(0)
+
+  const [isBotEnabled, setBotEnabled] = useState(false);
+  const [darkMode, setDarkMode] = useState(false)
+
+  function toggleBot() {
+    setBotEnabled(!isBotEnabled)
+  }
+
+  function toggleDarkMode() {
+    setDarkMode(!darkMode)
+  }
 
   function renderBoardPiece(position) {
-    return(
+    return (
       <Position value={board[position]} onClick={() => makeMove(position)} />
     )
   }
 
-  function makeMove(position){
+  function makeMove(position) {
 
-    if (board[position] === null || board[position] === ''){
-      
+    if (board[position] === null || board[position] === '') {
+
       let boardCopy = board.slice()
 
-      if (player){
+      if (player) {
         boardCopy[position] = 'X'
       } else {
         boardCopy[position] = 'O'
       }
-      
+
       setBoard(boardCopy)
       setPlayer(!player)
 
@@ -55,15 +68,15 @@ const App  = () => {
 
   }
 
-  useEffect(()=>{
-    
-    if (checkWinner(board)){
+  useEffect(() => {
+
+    if (checkWinner(board)) {
       setPointer('none')
 
-      if (!player) {
+      if (player) {
         setScoreOne(scoreOne + 1)
         console.warn('Jogador 1 venceu!')
-      } else{
+      } else {
         console.warn('Jogador 2 venceu!')
         setScoreTwo(scoreTwo + 1)
       }
@@ -72,27 +85,27 @@ const App  = () => {
         setPointer('auto')
       }, 3000)
     }
-    
-    else if ( checkFullBoard(board) ){
+
+    else if (checkFullBoard(board)) {
       console.warn('Empatou!')
     }
-    
+
   }, [board])
 
   useEffect(() => {
     if (player === false) {
       let botMove = bestMove()
-      
-      setTimeout(() => {makeMove(botMove)}, 500)
+
+      setTimeout(() => { makeMove(botMove) }, 500)
     }
   }, [player])
 
   function checkWinner(board) {
 
-    if (board === undefined){
+    if (board === undefined) {
       return
     }
-    
+
     const possibleWins = [
       [0, 1, 2],
       [3, 4, 5],
@@ -104,13 +117,13 @@ const App  = () => {
       [0, 4, 8]
     ]
 
-    for (let i = 0; i < possibleWins.length; i++){
+    for (let i = 0; i < possibleWins.length; i++) {
       let [posOne, posTwo, posThree] = possibleWins[i]
-      
-      if ((board[posOne] === 'X' && board[posTwo] === 'X' && board[posThree] === 'X') || 
-          (board[posOne] === 'O' && board[posTwo] === 'O' && board[posThree] === 'O')){
+
+      if ((board[posOne] === 'X' && board[posTwo] === 'X' && board[posThree] === 'X') ||
+        (board[posOne] === 'O' && board[posTwo] === 'O' && board[posThree] === 'O')) {
         return true
-        
+
       }
 
     }
@@ -119,21 +132,21 @@ const App  = () => {
   }
 
   function checkFullBoard(board) {
-    for(let i = 0; i < board.length; i++){
-      if (board[i] === null || board[i] === ''){
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === null || board[i] === '') {
         return false
-      } 
+      }
     }
     return true
   }
 
-  function restartGame(){
+  function restartGame() {
     clearBoard()
     setScoreOne(0)
     setScoreTwo(0)
   }
 
-  function clearBoard(){
+  function clearBoard() {
     setBoard(initialTestBoard)
     setPlayer(true)
   }
@@ -142,9 +155,9 @@ const App  = () => {
     let bestScore = Infinity
     let move
     let auxBoard = board.slice()
-  
-    for(let i = 0; i < board.length; i++){
-      if(auxBoard[i] === null || auxBoard[i] === ''){
+
+    for (let i = 0; i < board.length; i++) {
+      if (auxBoard[i] === null || auxBoard[i] === '') {
         auxBoard[i] = 'O'
         let score = miniMax(auxBoard, 0, true)
         console.log('********** score ' + score + ' i = ' + i)
@@ -159,24 +172,24 @@ const App  = () => {
     return move
   }
 
-  function miniMax(currentBoard, depth, isMaximizing){
+  function miniMax(currentBoard, depth, isMaximizing) {
 
     let auxBoard = currentBoard.slice()
 
-    if(checkWinner(auxBoard)){
-      if(isMaximizing){
-        return - 10 + depth 
-      }else{
+    if (checkWinner(auxBoard)) {
+      if (isMaximizing) {
+        return - 10 + depth
+      } else {
         return 10 - depth
       }
-    }else if (checkFullBoard(auxBoard)){
+    } else if (checkFullBoard(auxBoard)) {
       return 0
     }
 
-    if(isMaximizing){
+    if (isMaximizing) {
       let bestScore = -Infinity
-      for(let i = 0; i < auxBoard.length; i++){
-        if(auxBoard[i] === null || auxBoard[i] === ''){
+      for (let i = 0; i < auxBoard.length; i++) {
+        if (auxBoard[i] === null || auxBoard[i] === '') {
           auxBoard[i] = 'X'
           let score = miniMax(auxBoard, depth + 1, false)
           auxBoard[i] = ''
@@ -188,10 +201,10 @@ const App  = () => {
       }
       return bestScore
 
-    }else{
+    } else {
       let bestScore = Infinity
-      for(let i = 0; i < auxBoard.length; i++){
-        if(auxBoard[i] === null || auxBoard[i] === ''){
+      for (let i = 0; i < auxBoard.length; i++) {
+        if (auxBoard[i] === null || auxBoard[i] === '') {
           auxBoard[i] = 'O'
           let score = miniMax(auxBoard, depth + 1, true)
           auxBoard[i] = ''
@@ -209,9 +222,9 @@ const App  = () => {
     <>
       <StatusBar barStyle="light-content" />
       <View style={styles.header_buttons}>
-          <TouchableOpacity onPress={() => restartGame()}>
-            <Text>Restart</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => restartGame()}>
+          <Text>Restart</Text>
+        </TouchableOpacity>
       </View>
       <View pointerEvents={pointer} style={styles.board}>
 
@@ -226,17 +239,47 @@ const App  = () => {
           {renderBoardPiece(4)}
           {renderBoardPiece(5)}
         </View>
-        
+
         <View style={styles.boardRow}>
           {renderBoardPiece(6)}
           {renderBoardPiece(7)}
           {renderBoardPiece(8)}
         </View>
-        
+
       </View>
-      <View style={styles.scores}>
-          <Text style={styles.score_text}>Player X: {scoreOne}</Text>
-          <Text style={styles.score_text}>Player O: {scoreTwo}</Text>
+      <View style={styles.panel}>
+        <View style={styles.score}>
+          <View style={styles.scoreRow}>
+            <Text style={[styles.score_text]}>Player X </Text><Text style={[styles.score_text, {paddingLeft:10, paddingRight: 10, borderRadius: 5, backgroundColor: 'darkgray'}]}>{scoreOne}</Text>
+          </View>
+          <View style={styles.scoreRow}>
+            <Text style={[styles.score_text]}>Player O </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'darkgray'}]}>{scoreTwo}</Text>
+          </View>
+        </View>
+        <View style={styles.settings}>
+          <View style={styles.settingsRow}>
+            <Image style={styles.icon} source={require('./src/assets/robot.png')} />
+            <Switch
+              trackColor={{ false: '#767577', true: '#767577' }}
+              thumbColor={isBotEnabled ? '#f4f3f4' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleBot}
+              value={isBotEnabled}
+            />
+          </View>
+          
+          <View style={styles.settingsRow}>
+            <Image style={styles.icon} source={require('./src/assets/sun.png')} />
+            <Switch
+              trackColor={{ false: '#767577', true: '#767577' }}
+              thumbColor={darkMode ? '#f4f3f4' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleDarkMode}
+              value={darkMode}
+            />
+          </View>
+
+        </View>
       </View>
     </>
   );
@@ -264,16 +307,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray'
   },
 
-  scores: {
+  panel: {
     flex: 0.2,
+    flexDirection: 'row',
     height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white'
+    //backgroundColor: '#1564be'
   },
 
   score_text: {
-    fontSize: height * 0.04
+    fontSize: height * 0.035,
+    marginLeft: 10
   },
 
   header_buttons: {
@@ -281,6 +326,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 10,
     alignItems: 'flex-end',
+  },
+
+  score: {
+    flex: 1,
+    minHeight: height * 0.12,
+    justifyContent: 'space-around',
+    margin: 5,
+    marginLeft: 20,
+    borderRadius: 5,
+  },
+
+  scoreRow: {
+    flexDirection: 'row', 
+    justifyContent: 'space-around'
+  },
+
+  settings: {
+    flex: 1,
+    minHeight: height * 0.12,
+    marginRight: 20,
+  },
+
+  settingsRow: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+
+  icon: {
+    width: height * 0.05,
+    height: height * 0.05,
+    resizeMode: 'contain',
   }
 });
 
