@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
-// import { Container } from './styles';
+const height = Dimensions.get('screen').height
 
 export default function Position({value, onClick}) {
   return (
@@ -13,15 +13,17 @@ export default function Position({value, onClick}) {
 
 const styles = StyleSheet.create({
     container:{
-        width: 100,
-        height: 100,
+        width: height * 0.15,
+        height: height * 0.15,
         margin: 10,
-        borderRadius: 5,
-        backgroundColor: 'lightgray',
+        borderRadius: height * 0.01,
+        backgroundColor: '#1564be',
         justifyContent: 'center',
         alignItems: 'center',
     },
     marker:{
-      fontSize: 40,
+      fontSize: height * 0.1,
+      fontWeight: 'bold',
+      color: '#f8bbd0'
     }
 })
