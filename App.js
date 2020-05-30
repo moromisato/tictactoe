@@ -82,6 +82,7 @@ const App = () => {
     if (checkWinner(board)) {
       setPointer('none')
 
+      // this is a temporary solution
       if (isBotEnabled === false){
         returnScore(!player)
       } else {
@@ -286,15 +287,6 @@ const App = () => {
             <Text style={[styles.scorePoints, {color: '#fff', backgroundColor: '#f56476'}]}>{scoreTwo}</Text>
             <Text style={styles.scorePoints}>{tie}</Text>
           </View>
-          {/* <View style={styles.scoreRow}>
-            <Text style={[styles.score_text]}>Jogador X </Text><Text style={[styles.score_text, {paddingLeft:10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreOne}</Text>
-          </View>
-          <View style={styles.scoreRow}>
-            <Text style={[styles.score_text]}>Jogador O </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreTwo}</Text>
-          </View>
-          <View style={styles.scoreRow}>
-            <Text style={[styles.score_text]}>Empates </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreTwo}</Text>
-          </View> */}
         </View>
         <View style={styles.settings}>
           <View style={styles.settingsRow}>
@@ -359,6 +351,7 @@ const styles = StyleSheet.create({
   },
 
   scoreText: {
+    color: '#525252',
     fontSize: height * 0.03,
     marginLeft: 10,
     margin: 2
