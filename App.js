@@ -32,6 +32,7 @@ const App = () => {
   const [ scoreOne, setScoreOne ] = useState(0)
   const [ scoreTwo, setScoreTwo ] = useState(0)
   const [ tie, setTie ] = useState(0)
+  const [ message, setMessage ] = useState('')
 
   const [ isBotEnabled, setBotEnabled ] = useState(false);
   const [ darkMode, setDarkMode ] = useState(false)
@@ -96,7 +97,7 @@ const App = () => {
     }
 
     else if (checkFullBoard(board)) {
-      console.log('empate')
+      setMessage('Empate!')
       setTie(tie + 1)
       setTimeout(() => {
         clearBoard()
@@ -123,10 +124,10 @@ const App = () => {
 
   function returnScore(player) {
     if (player) {
-      console.warn('Jogador 1 venceu!')
+      setMessage('Jogador X venceu!')
       return setScoreOne(scoreOne + 1)
     } else {
-      console.warn('Jogador 2 venceu!')
+      setMessage('Jogador O venceu!')
       return setScoreTwo(scoreTwo + 1)
     }
   }
@@ -177,6 +178,7 @@ const App = () => {
   }
 
   function clearBoard() {
+    setMessage('')
     setBoard(initialTestBoard)
     setPlayer(true)
   }
@@ -274,6 +276,9 @@ const App = () => {
           {renderBoardPiece(8)}
         </View>
 
+      </View>
+      <View style={{flex:0.1, margin: 5, alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={styles.message}>{message}</Text>
       </View>
       <View style={styles.panel}>
         <View style={styles.score}>
@@ -404,6 +409,11 @@ const styles = StyleSheet.create({
     width: height * 0.05,
     height: height * 0.05,
     resizeMode: 'contain',
+  },
+
+  message: {
+    fontSize: height * 0.03,
+    color: '#ff0000'
   }
 });
 
