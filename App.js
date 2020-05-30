@@ -26,16 +26,19 @@ const App = () => {
 
   let initialTestBoard = Array(9).fill(null)
 
-  const [board, setBoard] = useState(initialTestBoard)
-  const [pointer, setPointer] = useState('auto')
-  const [player, setPlayer] = useState(true)
-  const [scoreOne, setScoreOne] = useState(0)
-  const [scoreTwo, setScoreTwo] = useState(0)
+  const [ board, setBoard ] = useState(initialTestBoard)
+  const [ pointer, setPointer ] = useState('auto')
+  const [ player, setPlayer ] = useState(true)
+  const [ scoreOne, setScoreOne ] = useState(0)
+  const [ scoreTwo, setScoreTwo ] = useState(0)
+  const [ tie, setTie ] = useState(0)
 
-  const [isBotEnabled, setBotEnabled] = useState(false);
-  const [darkMode, setDarkMode] = useState(false)
+  const [ isBotEnabled, setBotEnabled ] = useState(false);
+  const [ darkMode, setDarkMode ] = useState(false)
 
   function toggleBot() {
+    clearBoard()
+    restartGame()
     setBotEnabled(!isBotEnabled)
   }
 
@@ -50,7 +53,7 @@ const App = () => {
   }
 
   function makeMove(position) {
-
+    
     if (board[position] === null || board[position] === '') {
 
       let boardCopy = board.slice()
@@ -62,8 +65,14 @@ const App = () => {
       }
 
       setBoard(boardCopy)
-      setPlayer(!player)
 
+      console.log('alterei player', !player)
+      
+      setPlayer(!player)
+      if (isBotEnabled === true) {
+        setPointer('none')
+      }
+      
     }
 
   }
@@ -73,13 +82,12 @@ const App = () => {
     if (checkWinner(board)) {
       setPointer('none')
 
-      if (player) {
-        setScoreOne(scoreOne + 1)
-        console.warn('Jogador 1 venceu!')
+      if (isBotEnabled === false){
+        returnScore(!player)
       } else {
-        console.warn('Jogador 2 venceu!')
-        setScoreTwo(scoreTwo + 1)
+        returnScore(player)
       }
+
       setTimeout(() => {
         clearBoard()
         setPointer('auto')
@@ -87,18 +95,40 @@ const App = () => {
     }
 
     else if (checkFullBoard(board)) {
-      console.warn('Empatou!')
+      console.log('empate')
+      setTie(tie + 1)
+      setTimeout(() => {
+        clearBoard()
+      }, 3000)
     }
+
 
   }, [board])
 
   useEffect(() => {
-    if (player === false) {
-      let botMove = bestMove()
 
-      setTimeout(() => { makeMove(botMove) }, 500)
+    if (isBotEnabled === true) {
+      if (player === false) {
+        let botMove = bestMove()
+  
+        setTimeout(() => { 
+          makeMove(botMove)
+          setPointer('auto')
+        }, 500) 
+      }
     }
+
   }, [player])
+
+  function returnScore(player) {
+    if (player) {
+      console.warn('Jogador 1 venceu!')
+      return setScoreOne(scoreOne + 1)
+    } else {
+      console.warn('Jogador 2 venceu!')
+      return setScoreTwo(scoreTwo + 1)
+    }
+  }
 
   function checkWinner(board) {
 
@@ -123,7 +153,6 @@ const App = () => {
       if ((board[posOne] === 'X' && board[posTwo] === 'X' && board[posThree] === 'X') ||
         (board[posOne] === 'O' && board[posTwo] === 'O' && board[posThree] === 'O')) {
         return true
-
       }
 
     }
@@ -160,7 +189,7 @@ const App = () => {
       if (auxBoard[i] === null || auxBoard[i] === '') {
         auxBoard[i] = 'O'
         let score = miniMax(auxBoard, 0, true)
-        console.log('********** score ' + score + ' i = ' + i)
+        //console.log('********** score ' + score + ' i = ' + i)
         auxBoard[i] = ''
         if (score < bestScore) {
           bestScore = score
@@ -195,7 +224,6 @@ const App = () => {
           auxBoard[i] = ''
           if (score > bestScore) {
             bestScore = score
-            move = i
           }
         }
       }
@@ -210,7 +238,6 @@ const App = () => {
           auxBoard[i] = ''
           if (score < bestScore) {
             bestScore = score
-            move = i
           }
         }
       }
@@ -222,8 +249,8 @@ const App = () => {
     <>
       <StatusBar barStyle="light-content" />
       <View style={styles.header_buttons}>
-        <TouchableOpacity onPress={() => restartGame()}>
-          <Text>Restart</Text>
+        <TouchableOpacity style={{backgroundColor: '#f56476', padding: 5, borderRadius: 3}} onPress={() => restartGame()}>
+          <Text style={{color: '#fff'}}>Reiniciar jogo</Text>
         </TouchableOpacity>
       </View>
       <View pointerEvents={pointer} style={styles.board}>
@@ -249,18 +276,31 @@ const App = () => {
       </View>
       <View style={styles.panel}>
         <View style={styles.score}>
-          <View style={styles.scoreRow}>
-            <Text style={[styles.score_text]}>Player X </Text><Text style={[styles.score_text, {paddingLeft:10, paddingRight: 10, borderRadius: 5, backgroundColor: 'darkgray'}]}>{scoreOne}</Text>
+          <View>
+            <Text style={[styles.scoreText]}>Jogador X</Text>
+            <Text style={[styles.scoreText]}>Jogador O</Text>
+            <Text style={[styles.scoreText]}>Empates</Text>
+          </View>
+          <View>
+            <Text style={[styles.scorePoints, {color: '#fff', backgroundColor: '#1564be'}]}>{scoreOne}</Text>
+            <Text style={[styles.scorePoints, {color: '#fff', backgroundColor: '#f56476'}]}>{scoreTwo}</Text>
+            <Text style={styles.scorePoints}>{tie}</Text>
+          </View>
+          {/* <View style={styles.scoreRow}>
+            <Text style={[styles.score_text]}>Jogador X </Text><Text style={[styles.score_text, {paddingLeft:10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreOne}</Text>
           </View>
           <View style={styles.scoreRow}>
-            <Text style={[styles.score_text]}>Player O </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'darkgray'}]}>{scoreTwo}</Text>
+            <Text style={[styles.score_text]}>Jogador O </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreTwo}</Text>
           </View>
+          <View style={styles.scoreRow}>
+            <Text style={[styles.score_text]}>Empates </Text><Text style={[styles.score_text, {paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: 'lightgray'}]}>{scoreTwo}</Text>
+          </View> */}
         </View>
         <View style={styles.settings}>
           <View style={styles.settingsRow}>
             <Image style={styles.icon} source={require('./src/assets/robot.png')} />
             <Switch
-              trackColor={{ false: '#767577', true: '#767577' }}
+              trackColor={{ false: 'lightgray', true: '#64d183' }}
               thumbColor={isBotEnabled ? '#f4f3f4' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleBot}
@@ -269,14 +309,14 @@ const App = () => {
           </View>
           
           <View style={styles.settingsRow}>
-            <Image style={styles.icon} source={require('./src/assets/sun.png')} />
+           {/*  <Image style={styles.icon} source={require('./src/assets/sun.png')} />
             <Switch
-              trackColor={{ false: '#767577', true: '#767577' }}
+              trackColor={{ false: 'lightgray', true: 'lightgray' }}
               thumbColor={darkMode ? '#f4f3f4' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleDarkMode}
               value={darkMode}
-            />
+            /> */}
           </View>
 
         </View>
@@ -313,25 +353,38 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 8,
     //backgroundColor: '#1564be'
   },
 
-  score_text: {
-    fontSize: height * 0.035,
-    marginLeft: 10
+  scoreText: {
+    fontSize: height * 0.03,
+    marginLeft: 10,
+    margin: 2
+  },
+
+  scorePoints: {
+    fontSize: height * 0.03,
+    paddingLeft:10, 
+    paddingRight: 10, 
+    borderRadius: 5,
+    margin: 2,
+    backgroundColor: 'lightgray'
   },
 
   header_buttons: {
     flex: 0.1,
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 16,
     alignItems: 'flex-end',
   },
 
   score: {
     flex: 1,
+    flexDirection: 'row',
     minHeight: height * 0.12,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     margin: 5,
     marginLeft: 20,
     borderRadius: 5,
