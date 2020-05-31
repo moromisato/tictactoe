@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
     width: height * 0.05,
     height: height * 0.05,
     resizeMode: 'contain',
+    marginRight: 10
   },
 
   message: {
