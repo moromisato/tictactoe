@@ -18,7 +18,12 @@ import {
   Image
 } from 'react-native';
 
+import admob, { MaxAdContentRating, firebase } from '@react-native-firebase/admob';
+import { BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
+
 const height = Dimensions.get('screen').height
+
+const adId = __DEV__ ? TestIds.BANNER : "ca-app-pub-1289154948977291~7495283198"
 
 import Position from './src/components/Position';
 
@@ -77,6 +82,25 @@ const App = () => {
     }
 
   }
+
+  useEffect(() => {
+    
+    /* admob()
+    .setRequestConfiguration({
+      // Update all future requests suitable for parental guidance
+      maxAdContentRating: MaxAdContentRating.PG,
+
+      // Indicates that you want your content treated as child-directed for purposes of COPPA.
+      tagForChildDirectedTreatment: true,
+
+      // Indicates that you want the ad request to be handled in a
+      // manner suitable for users under the age of consent.
+      tagForUnderAgeOfConsent: true,
+    })
+    .then(() => {
+      console.log('admob successfully configured!')
+    }); */
+  }, [])
 
   useEffect(() => {
 
@@ -251,6 +275,22 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
+      <View style = {{flex: 0.1, margin: 5, padding: 5, alignItems: 'center', justifyContent: 'center'}}>
+        <BannerAd
+            unitId={adId}
+            //unitId={'ca-app-pub-1289154948977291/3665757936'}
+            size={BannerAdSize.BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+            onAdLoaded={() => {
+                console.log('Advert loaded');
+            }}
+            onAdFailedToLoad={(error) => {
+                console.error('Advert failed to load: ', error);
+            }}
+        />
+      </View>
       <View style={styles.header_buttons}>
         <TouchableOpacity style={{backgroundColor: '#f56476', padding: 5, borderRadius: 3}} onPress={() => restartGame()}>
           <Text style={{color: '#fff'}}>Reiniciar jogo</Text>
@@ -324,7 +364,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   board: {
-    flex: 1,
+    flex: 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
@@ -375,6 +415,7 @@ const styles = StyleSheet.create({
     flex: 0.1,
     justifyContent: 'center',
     marginRight: 16,
+    marginBottom: 8,
     alignItems: 'flex-end',
   },
 
