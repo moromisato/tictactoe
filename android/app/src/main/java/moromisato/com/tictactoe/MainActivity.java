@@ -1,4 +1,4 @@
-package com.jogodavelha;
+package moromisato.com.tictactoe;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "JogodaVelha";
+    return "Jogodavelha";
   }
 }

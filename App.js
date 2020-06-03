@@ -23,7 +23,7 @@ import { BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
 
 const height = Dimensions.get('screen').height
 
-const adId = __DEV__ ? TestIds.BANNER : "ca-app-pub-1289154948977291~7495283198"
+const adId = __DEV__ ? TestIds.BANNER : "ca-app-pub-1289154948977291/6175083116"
 
 import Position from './src/components/Position';
 
@@ -199,6 +199,7 @@ const App = () => {
     clearBoard()
     setScoreOne(0)
     setScoreTwo(0)
+    setTie(0)
   }
 
   function clearBoard() {
