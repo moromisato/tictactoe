@@ -18,7 +18,6 @@ import {
   Image
 } from 'react-native';
 
-import admob, { MaxAdContentRating, firebase } from '@react-native-firebase/admob';
 import { BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
 
 const height = Dimensions.get('screen').height
@@ -42,6 +41,8 @@ const App = () => {
   const [ isBotEnabled, setBotEnabled ] = useState(false);
   const [ darkMode, setDarkMode ] = useState(false)
 
+  const [ togglePointer, setTogglePointer ] = useState(true)
+
   function toggleBot() {
     clearBoard()
     restartGame()
@@ -59,27 +60,30 @@ const App = () => {
   }
 
   function makeMove(position) {
-    
-    if (board[position] === null || board[position] === '') {
 
-      let boardCopy = board.slice()
-
-      if (player) {
-        boardCopy[position] = 'X'
-      } else {
-        boardCopy[position] = 'O'
+    if ( checkWinner(board) === false ) {
+      if (board[position] === null || board[position] === '') {
+  
+        let boardCopy = board.slice()
+  
+        if (player) {
+          boardCopy[position] = 'X'
+        } else {
+          boardCopy[position] = 'O'
+        }
+  
+        setBoard(boardCopy)
+  
+        // console.log('alterei player', !player)
+        
+        setPlayer(!player)
+        if (isBotEnabled === true) {
+          setPointer('none')
+        }
+        
       }
-
-      setBoard(boardCopy)
-
-      console.log('alterei player', !player)
-      
-      setPlayer(!player)
-      if (isBotEnabled === true) {
-        setPointer('none')
-      }
-      
     }
+    
 
   }
 
@@ -105,6 +109,7 @@ const App = () => {
   useEffect(() => {
 
     if (checkWinner(board)) {
+
       setPointer('none')
 
       // this is a temporary solution
@@ -118,6 +123,7 @@ const App = () => {
         clearBoard()
         setPointer('auto')
       }, 3000)
+
     }
 
     else if (checkFullBoard(board)) {
@@ -276,7 +282,7 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <View style = {{flex: 0.1, margin: 5, padding: 5, alignItems: 'center', justifyContent: 'center'}}>
+      <View style = { styles.bannerAd }>
         <BannerAd
             unitId={adId}
             //unitId={'ca-app-pub-1289154948977291/3665757936'}
@@ -292,12 +298,14 @@ const App = () => {
             }}
         />
       </View>
+      
       <View style={styles.header_buttons}>
         <TouchableOpacity style={{backgroundColor: '#f56476', padding: 5, borderRadius: 3}} onPress={() => restartGame()}>
           <Text style={{color: '#fff'}}>Reiniciar jogo</Text>
         </TouchableOpacity>
       </View>
-      <View pointerEvents={pointer} style={styles.board}>
+      
+      <View pointerEvents={ pointer } style={ styles.board }>
 
         <View style={styles.boardRow}>
           {renderBoardPiece(0)}
@@ -318,6 +326,7 @@ const App = () => {
         </View>
 
       </View>
+      
       <View style={{flex:0.1, margin: 5, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.message}>{message}</Text>
       </View>
@@ -347,10 +356,10 @@ const App = () => {
           </View>
           
           <View style={styles.settingsRow}>
-           {/*  <Image style={styles.icon} source={require('./src/assets/sun.png')} />
+{/*             <Image style={styles.icon} source={require('./src/assets/sun.png')} />
             <Switch
-              trackColor={{ false: 'lightgray', true: 'lightgray' }}
-              thumbColor={darkMode ? '#f4f3f4' : '#f4f3f4'}
+              trackColor={{ false: 'lightgray', true: '#64d183' }}
+              thumbColor={togglePointer ? '#f4f3f4' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleDarkMode}
               value={darkMode}
@@ -457,6 +466,14 @@ const styles = StyleSheet.create({
   message: {
     fontSize: height * 0.03,
     color: '#ff0000'
+  },
+
+  bannerAd: {
+    flex: 0.1, 
+    margin: 5, 
+    padding: 5, 
+    alignItems: 'center', 
+    justifyContent: 'center'
   }
 });
 
