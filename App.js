@@ -300,9 +300,14 @@ const App = () => {
       </View>
       
       <View style={styles.header_buttons}>
-        <TouchableOpacity style={{backgroundColor: '#f56476', padding: 5, borderRadius: 3}} onPress={() => restartGame()}>
+        <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity style={{backgroundColor: '#f56476', marginRight: 10, padding: 5, borderRadius: 3}} onPress={() => restartGame()}>
           <Text style={{color: '#fff'}}>Reiniciar jogo</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={{backgroundColor: '#525252', padding: 5, borderRadius: 3}} onPress={() => clearBoard()}>
+          <Text style={{color: '#fff'}}>Limpar</Text>
+        </TouchableOpacity>
+        </View>
       </View>
       
       <View pointerEvents={ pointer } style={ styles.board }>
@@ -423,6 +428,7 @@ const styles = StyleSheet.create({
 
   header_buttons: {
     flex: 0.1,
+    flexDirection: 'column',
     justifyContent: 'center',
     marginRight: 16,
     marginBottom: 8,
