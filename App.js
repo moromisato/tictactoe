@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -18,11 +10,13 @@ import {
   Image
 } from 'react-native';
 
-import { BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+
+import admob_android_app_id from './firebase.json'
 
 const height = Dimensions.get('screen').height
 
-const adId = __DEV__ ? TestIds.BANNER : "ca-app-pub-1289154948977291/6175083116"
+const adId = __DEV__ ? TestIds.BANNER : admob_android_app_id['react-native']['admob_android_app_id']
 
 import Position from './src/components/Position';
 
@@ -84,27 +78,8 @@ const App = () => {
       }
     }
     
-
   }
 
-  useEffect(() => {
-    
-    /* admob()
-    .setRequestConfiguration({
-      // Update all future requests suitable for parental guidance
-      maxAdContentRating: MaxAdContentRating.PG,
-
-      // Indicates that you want your content treated as child-directed for purposes of COPPA.
-      tagForChildDirectedTreatment: true,
-
-      // Indicates that you want the ad request to be handled in a
-      // manner suitable for users under the age of consent.
-      tagForUnderAgeOfConsent: true,
-    })
-    .then(() => {
-      console.log('admob successfully configured!')
-    }); */
-  }, [])
 
   useEffect(() => {
 
