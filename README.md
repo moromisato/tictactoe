@@ -15,7 +15,7 @@ A base para a implementação do MiniMax foi:
 * [Algorithms Explained – minimax and alpha-beta pruning](https://www.youtube.com/watch?v=l-hh51ncgDI)
 * [Coding Challenge 154: Tic Tac Toe AI with Minimax Algorithm](https://www.youtube.com/watch?v=trKjYdBASyQ&t=1023s)
 
-# *Screenshots
+# Screenshots
 
 <p float="left">
 <img src="https://github.com/moromisato/tictactoe/blob/master/src/assets/screenshots/Screenshot_1591581879.jpg" width="169" heigh="300" />
