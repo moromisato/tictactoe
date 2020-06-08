@@ -256,9 +256,9 @@ const App = () => {
 
   return (
     <>
-      <StatusBar barStyle="light-content" />
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style = { styles.bannerAd }>
-        <BannerAd
+       {/*  <BannerAd
             unitId={adId}
             //unitId={'ca-app-pub-1289154948977291/3665757936'}
             size={BannerAdSize.BANNER}
@@ -271,7 +271,7 @@ const App = () => {
             onAdFailedToLoad={(error) => {
                 console.error('Advert failed to load: ', error);
             }}
-        />
+        /> */}
       </View>
       
       <View style={styles.header_buttons}>
@@ -315,7 +315,7 @@ const App = () => {
           <View>
             <Text style={[styles.scoreText]}>Jogador X</Text>
             <Text style={[styles.scoreText]}>Jogador O</Text>
-            <Text style={[styles.scoreText]}>Empates</Text>
+            <Text style={[styles.scoreText]}>Empate</Text>
           </View>
           <View>
             <Text style={[styles.scorePoints, {color: '#fff', backgroundColor: '#1564be'}]}>{scoreOne}</Text>
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: '#fff'
   },
 
   boardRow: {
