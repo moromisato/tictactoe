@@ -60,4 +60,5 @@ buck-out/
 
 # AdMob publisher id
 firebase.json
-android/gradle.properties
+keydetails.json
+gradle-properties-missing-lines.txt
