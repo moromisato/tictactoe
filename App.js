@@ -35,8 +35,6 @@ const App = () => {
   const [ isBotEnabled, setBotEnabled ] = useState(false);
   const [ darkMode, setDarkMode ] = useState(false)
 
-  const [ togglePointer, setTogglePointer ] = useState(true)
-
   function toggleBot() {
     clearBoard()
     restartGame()
@@ -67,8 +65,6 @@ const App = () => {
         }
   
         setBoard(boardCopy)
-  
-        // console.log('alterei player', !player)
         
         setPlayer(!player)
         if (isBotEnabled === true) {
@@ -258,7 +254,7 @@ const App = () => {
     <>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style = { styles.bannerAd }>
-       {/*  <BannerAd
+        <BannerAd
             unitId={adId}
             //unitId={'ca-app-pub-1289154948977291/3665757936'}
             size={BannerAdSize.BANNER}
@@ -271,7 +267,7 @@ const App = () => {
             onAdFailedToLoad={(error) => {
                 console.error('Advert failed to load: ', error);
             }}
-        /> */}
+        />
       </View>
       
       <View style={styles.header_buttons}>
