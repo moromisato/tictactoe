@@ -10,13 +10,15 @@ import {
   Image
 } from 'react-native';
 
-import BoardPiece from './src/components/BoardPiece'
+import BoardPiece from '../components/BoardPiece'
 
 const height = Dimensions.get('screen').height
 
 export default function MainPage() {
-  
-  const [board, setBoard] = useState(initialTestBoard)
+
+  let initialBoard = Array(9).fill(null)
+
+  const [board, setBoard] = useState(initialBoard)
   const [pointer, setPointer] = useState('auto')
   const [player, setPlayer] = useState(true)
   const [scoreOne, setScoreOne] = useState(0)
@@ -172,7 +174,7 @@ export default function MainPage() {
 
   function clearBoard() {
     setMessage('')
-    setBoard(initialTestBoard)
+    setBoard(initialBoard)
     setPlayer(true)
   }
 
@@ -244,7 +246,9 @@ export default function MainPage() {
   return (
     <>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-
+      <View style = { styles.title }>
+        <Text style={ styles.titleText}>Jogo da velha</Text>
+      </View>
       <View style={styles.header_buttons}>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={{ backgroundColor: '#f56476', marginRight: 10, padding: 5, borderRadius: 3 }} onPress={() => restartGame()}>
@@ -296,7 +300,7 @@ export default function MainPage() {
         </View>
         <View style={styles.settings}>
           <View style={styles.settingsRow}>
-            <Image style={styles.icon} source={require('./src/assets/robot.png')} />
+            <Image style={styles.icon} source={require('../assets/robot.png')} />
             <Switch
               trackColor={{ false: 'lightgray', true: '#64d183' }}
               thumbColor={isBotEnabled ? '#f4f3f4' : '#f4f3f4'}
@@ -419,11 +423,16 @@ const styles = StyleSheet.create({
     color: '#ff0000'
   },
 
-  bannerAd: {
-    flex: 0.1, 
-    margin: 5, 
-    padding: 5, 
+  title: {
+    flex: 0.1,
     alignItems: 'center', 
     justifyContent: 'center'
+  },
+
+  titleText: {
+    flex: 1,
+    fontSize: height * 0.04,
+    fontWeight: 'bold',
+    color: '#1564be'
   }
 });
