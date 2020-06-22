@@ -11,10 +11,14 @@ import {
 } from 'react-native';
 
 import BoardPiece from '../components/BoardPiece'
+import { useTranslation } from 'react-i18next'
+
 
 const height = Dimensions.get('screen').height
 
 export default function MainPage() {
+
+  const {t} = useTranslation()
 
   let initialBoard = Array(9).fill(null)
 
@@ -91,7 +95,7 @@ export default function MainPage() {
     }
 
     else if (checkFullBoard(board)) {
-      setMessage('Empate!')
+      setMessage(t('tie_message'))
       setTie(tie + 1)
       setTimeout(() => {
         clearBoard()
@@ -118,10 +122,10 @@ export default function MainPage() {
 
   function returnScore(player) {
     if (player) {
-      setMessage('Jogador X venceu!')
+      setMessage(t('player_x_won_message'))
       return setScoreOne(scoreOne + 1)
     } else {
-      setMessage('Jogador O venceu!')
+      setMessage(t('player_o_won_message'))
       return setScoreTwo(scoreTwo + 1)
     }
   }
@@ -247,15 +251,15 @@ export default function MainPage() {
     <>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style = { styles.title }>
-        <Text style={ styles.titleText}>Jogo da velha</Text>
+        <Text style={ styles.titleText}>{t('app_name')}</Text>
       </View>
       <View style={styles.header_buttons}>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={{ backgroundColor: '#f56476', marginRight: 10, padding: 5, borderRadius: 3 }} onPress={() => restartGame()}>
-            <Text style={{ color: '#fff' }}>Reiniciar jogo</Text>
+            <Text style={{ color: '#fff' }}>{t('restart_game')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ backgroundColor: '#525252', padding: 5, borderRadius: 3 }} onPress={() => clearBoard()}>
-            <Text style={{ color: '#fff' }}>Limpar</Text>
+            <Text style={{ color: '#fff' }}>{t('clear_board')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -288,9 +292,9 @@ export default function MainPage() {
       <View style={styles.panel}>
         <View style={styles.score}>
           <View>
-            <Text style={[styles.scoreText]}>Jogador X</Text>
-            <Text style={[styles.scoreText]}>Jogador O</Text>
-            <Text style={[styles.scoreText]}>Empate</Text>
+            <Text style={[styles.scoreText]}>{t('player_x')}</Text>
+            <Text style={[styles.scoreText]}>{t('player_o')}</Text>
+            <Text style={[styles.scoreText]}>{t('tie')}</Text>
           </View>
           <View>
             <Text style={[styles.scorePoints, { color: '#fff', backgroundColor: '#1564be' }]}>{scoreOne}</Text>
