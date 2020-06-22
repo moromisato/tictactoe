@@ -12,11 +12,11 @@ import {
 
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 
-import admob_android_app_id from './firebase.json'
+import ids from './banner_id.json'
 
 const height = Dimensions.get('screen').height
 
-const adId = __DEV__ ? TestIds.BANNER : admob_android_app_id['react-native']['admob_android_app_id']
+const adId = __DEV__ ? TestIds.BANNER : ids['top_banner_id']
 
 import Position from './src/components/Position';
 

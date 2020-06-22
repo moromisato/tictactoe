@@ -62,3 +62,4 @@ buck-out/
 firebase.json
 keydetails.json
 gradle-properties-missing-lines.txt
+banner_id.json
