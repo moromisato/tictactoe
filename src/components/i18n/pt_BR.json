@@ -1,0 +1,13 @@
+{
+    "translation": {
+        "app_name": "Jogo da Velha",
+        "restart_game": "Reiniciar jogo",
+        "clear_board": "Limpar",
+        "player_x": "Jogador X",
+        "player_o": "Jogador O",
+        "tie": "Empate",
+        "tie_message": "Empate!",
+        "player_x_won_message": "Jogador X venceu!",
+        "player_o_won_message": "Jogador O venceu!"
+    }
+}
