@@ -1,0 +1,13 @@
+{
+    "translation": {
+        "app_name": "TicTacToe",
+        "restart_game": "Restart game",
+        "clear_board": "Clear",
+        "player_x": "Player X",
+        "player_o": "Player O",
+        "tie": "Tie",
+        "tie_message": "It's a tie!",
+        "player_x_won_message": "Player X Won!",
+        "player_o_won_message": "Player O Won!"
+    }
+}
