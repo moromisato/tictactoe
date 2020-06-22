@@ -129,7 +129,7 @@ const App = () => {
       setMessage(t('player_x_won_message'))
       return setScoreOne(scoreOne + 1)
     } else {
-      setMessage('player_o_won_message')
+      setMessage(t('player_o_won_message'))
       return setScoreTwo(scoreTwo + 1)
     }
   }
@@ -255,7 +255,7 @@ const App = () => {
     <>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style = { styles.bannerAd }>
-        <BannerAd
+       {/*  <BannerAd
             unitId={adId}
             //unitId={'ca-app-pub-1289154948977291/3665757936'}
             size={BannerAdSize.BANNER}
@@ -268,7 +268,7 @@ const App = () => {
             onAdFailedToLoad={(error) => {
                 console.error('Advert failed to load: ', error);
             }}
-        />
+        /> */}
       </View>
       
       <View style={styles.header_buttons}>
