@@ -13,9 +13,9 @@
     "@react-native-firebase/admob": "^7.1.2",
     "@react-native-firebase/app": "^7.1.4",
     "i18next": "^19.5.1",
-    "react": "16.11.0",
+    "react": "16.13.1",
     "react-i18next": "^11.7.0",
-    "react-native": "0.62.2"
+    "react-native": "0.63.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
