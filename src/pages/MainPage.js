@@ -10,15 +10,17 @@ import {
   Image
 } from 'react-native';
 
+
 import BoardPiece from '../components/BoardPiece'
 import { useTranslation } from 'react-i18next'
-
+import { useTheme } from '../context/useTheme'
 
 const height = Dimensions.get('screen').height
 
 export default function MainPage() {
 
   const {t} = useTranslation()
+  const { theme, toggleTheme } = useTheme()
 
   let initialBoard = Array(9).fill(null)
 
@@ -31,7 +33,7 @@ export default function MainPage() {
   const [message, setMessage] = useState('')
 
   const [isBotEnabled, setBotEnabled] = useState(false);
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(theme.type === 'DARK')
 
   function toggleBot() {
     clearBoard()
@@ -247,9 +249,17 @@ export default function MainPage() {
     }
   }
 
+  function renderStatusBar() {
+    if ( theme.type === 'LIGHT' ) {
+      return <StatusBar backgroundColor="white" barStyle="dark-content" />
+    } else {
+      return <StatusBar backgroundColor="black" barStyle="light-content" />
+    }
+  }
+
   return (
-    <>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+      { renderStatusBar() }
       <View style = { styles.title }>
         <Text style={ styles.titleText}>{t('app_name')}</Text>
       </View>
@@ -264,7 +274,7 @@ export default function MainPage() {
         </View>
       </View>
 
-      <View pointerEvents={pointer} style={styles.board}>
+      <View pointerEvents={pointer} style={[styles.board, {backgroundColor: theme.backgroundColor}]}>
 
         <View style={styles.boardRow}>
           {renderBoardPiece(0)}
@@ -292,9 +302,9 @@ export default function MainPage() {
       <View style={styles.panel}>
         <View style={styles.score}>
           <View>
-            <Text style={[styles.scoreText]}>{t('player_x')}</Text>
-            <Text style={[styles.scoreText]}>{t('player_o')}</Text>
-            <Text style={[styles.scoreText]}>{t('tie')}</Text>
+            <Text style={[styles.scoreText, {color: theme.textColor}]}>{t('player_x')}</Text>
+            <Text style={[styles.scoreText, {color: theme.textColor}]}>{t('player_o')}</Text>
+            <Text style={[styles.scoreText, {color: theme.textColor}]}>{t('tie')}</Text>
           </View>
           <View>
             <Text style={[styles.scorePoints, { color: '#fff', backgroundColor: '#1564be' }]}>{scoreOne}</Text>
@@ -314,29 +324,32 @@ export default function MainPage() {
             />
           </View>
           <View style={styles.settingsRow}>
-            {/*             <Image style={styles.icon} source={require('./src/assets/sun.png')} />
+            
             <Switch
               trackColor={{ false: 'lightgray', true: '#64d183' }}
-              thumbColor={togglePointer ? '#f4f3f4' : '#f4f3f4'}
+              thumbColor={darkMode ? '#f4f3f4' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleDarkMode}
-              value={darkMode}
-            /> */}
+              onValueChange={toggleTheme}
+              value={theme.type === 'DARK'}
+            />
           </View>
 
         </View>
       </View>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
   board: {
     flex: 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
-    backgroundColor: '#fff'
   },
 
   boardRow: {
@@ -364,7 +377,6 @@ const styles = StyleSheet.create({
   },
 
   scoreText: {
-    color: '#525252',
     fontSize: height * 0.03,
     marginLeft: 10,
     margin: 2
