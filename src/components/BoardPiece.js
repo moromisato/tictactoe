@@ -1,9 +1,12 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { useTheme } from '../context/useTheme';
 
 const height = Dimensions.get('screen').height
 
 export default function BoardPiece({value, onClick}) {
+
+  const { theme } = useTheme()
 
   const xMarkerColor = {
     color: '#1564be'
@@ -14,7 +17,7 @@ export default function BoardPiece({value, onClick}) {
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onClick}>
+    <TouchableOpacity style={[styles.container, { backgroundColor: theme.primaryColor }]} onPress={onClick}>
         <Text style={value === 'X' ? [styles.marker, xMarkerColor] : [styles.marker, oMakerColor]}>{value}</Text>
     </TouchableOpacity>
   );
@@ -27,7 +30,6 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: height * 0.01,
         borderWidth: 0,
-        backgroundColor: '#dae3e5',
         //backgroundColor: '#1564be',
         justifyContent: 'center',
         alignItems: 'center',
