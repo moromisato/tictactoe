@@ -11,11 +11,8 @@ import {
 } from 'react-native';
 
 import { useTranslation } from 'react-i18next'
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
-import ids from '../../banner_id.json'
 
 const height = Dimensions.get('screen').height
-const adId = __DEV__ ? TestIds.BANNER : ids['top_banner_id']
 
 import Position from '../components/Position';
 
@@ -76,7 +73,6 @@ const App = () => {
     }
     
   }
-
 
   useEffect(() => {
 
@@ -255,20 +251,7 @@ const App = () => {
     <>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style = { styles.bannerAd }>
-       {/*  <BannerAd
-            unitId={adId}
-            //unitId={'ca-app-pub-1289154948977291/3665757936'}
-            size={BannerAdSize.BANNER}
-            requestOptions={{
-              requestNonPersonalizedAdsOnly: true,
-            }}
-            onAdLoaded={() => {
-                console.log('Advert loaded');
-            }}
-            onAdFailedToLoad={(error) => {
-                console.error('Advert failed to load: ', error);
-            }}
-        /> */}
+        <Text style = { styles.title }>{t('app_name')}</Text>
       </View>
       
       <View style={styles.header_buttons}>
@@ -446,12 +429,19 @@ const styles = StyleSheet.create({
     color: '#ff0000'
   },
 
+  title: {
+    fontSize: 25,
+    color: '#1564be'
+  },
+
   bannerAd: {
     flex: 0.1, 
-    margin: 5, 
+    margin: 5,
+    borderRadius: 10,
     padding: 5, 
     alignItems: 'center', 
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#dae3e5'
   }
 });
 

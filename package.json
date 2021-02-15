@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-firebase/admob": "^7.1.2",
     "@react-native-firebase/app": "^7.1.4",
     "i18next": "^19.5.1",
     "react": "16.13.1",
